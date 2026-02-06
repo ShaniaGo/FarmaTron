@@ -1,0 +1,81 @@
+# ========================================
+# LARAVEL (Backend A)
+# ========================================
+backend-laravel/vendor/
+backend-laravel/.env
+backend-laravel/storage/*.key
+backend-laravel/public/storage
+backend-laravel/storage/app/public/*
+!backend-laravel/storage/app/public/.gitkeep
+backend-laravel/storage/framework/cache/data/*
+!backend-laravel/storage/framework/cache/data/.gitkeep
+backend-laravel/storage/framework/sessions/*
+!backend-laravel/storage/framework/sessions/.gitkeep
+backend-laravel/storage/framework/views/*
+!backend-laravel/storage/framework/views/.gitkeep
+backend-laravel/storage/logs/*
+!backend-laravel/storage/logs/.gitkeep
+backend-laravel/bootstrap/cache/*
+backend-laravel/.phpunit.result.cache
+backend-laravel/npm-debug.log
+backend-laravel/yarn-error.log
+
+# ========================================
+# FASTAPI (Backend B - Python)
+# ========================================
+backend-fastapi/venv/
+backend-fastapi/__pycache__/
+backend-fastapi/*.pyc
+backend-fastapi/.env
+backend-fastapi/.pytest_cache/
+backend-fastapi/.coverage
+backend-fastapi/htmlcov/
+backend-fastapi/.mypy_cache/
+backend-fastapi/.ruff_cache/
+backend-fastapi/*.egg-info/
+backend-fastapi/.python-version
+
+# ========================================
+# REACT (Frontend - Node.js)
+# ========================================
+frontend-react/node_modules/
+frontend-react/.env.local
+frontend-react/.env.development.local
+frontend-react/.env.test.local
+frontend-react/.env.production.local
+frontend-react/npm-debug.log*
+frontend-react/yarn-debug.log*
+frontend-react/yarn-error.log*
+frontend-react/dist/
+frontend-react/build/
+frontend-react/.next/
+frontend-react/out/
+frontend-react/.cache/
+frontend-react/.parcel-cache/
+
+# ========================================
+# VS CODE
+# ========================================
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# ========================================
+# SISTEMA
+# ========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+*.temp
+
+# ========================================
+# LARAGON
+# ========================================
+*.laragon
+*.sqlite
+*.sqlite-journal
