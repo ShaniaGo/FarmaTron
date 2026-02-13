@@ -34,11 +34,11 @@ Route::prefix('productos')->group(function () {
 });
 
 // Farmacias públicas
-Route::prefix('farmacias')->group(function () {
-    Route::get('/', [FarmaciaController::class, 'index']);
-    Route::get('/{id}', [FarmaciaController::class, 'show']);
-    Route::get('/{id}/productos', [FarmaciaController::class, 'productos']);
-});
+// Route::prefix('farmacias')->group(function () {
+//     Route::get('/', [FarmaciaController::class, 'index']);
+//     Route::get('/{id}', [FarmaciaController::class, 'show']);
+//     Route::get('/{id}/productos', [FarmaciaController::class, 'productos']);
+// });
 
 // Rutas protegidas con Sanctum
 Route::middleware('auth:sanctum')->group(function () {
@@ -50,12 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Perfil
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'show']);
-        Route::put('/', [ProfileController::class, 'update']);
-        Route::post('/change-password', [ProfileController::class, 'changePassword']);
-        Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
-    });
+    // Route::prefix('profile')->group(function () {
+    //     Route::get('/', [ProfileController::class, 'show']);
+    //     Route::put('/', [ProfileController::class, 'update']);
+    //     Route::post('/change-password', [ProfileController::class, 'changePassword']);
+    //     Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
+    // });
 
     // Carrito
     Route::prefix('carrito')->group(function () {

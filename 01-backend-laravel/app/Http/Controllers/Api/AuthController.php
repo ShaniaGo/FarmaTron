@@ -84,14 +84,14 @@ class AuthController extends Controller
             ], 422);
         }
 
-        if (!Auth::attempt($request->only('email', 'clave'))) {
+        $usuario = Usuario::where('email', $request->email)->first();
+
+        if (!$usuario || !Hash::check($request->clave, $usuario->clave)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
-
-        $usuario = Usuario::where('email', $request->email)->firstOrFail();
 
         if ($usuario->estado !== 'activo') {
             return response()->json([

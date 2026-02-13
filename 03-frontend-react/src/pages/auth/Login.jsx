@@ -5,7 +5,7 @@ import { Pill, Mail, Lock } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [clave, setclave] = useState('');
+  const [clave, setClave] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -63,12 +63,12 @@ const Login = () => {
                 <input
                   id="clave"
                   name="clave"
-                  type="clave"
+                  type="password"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                   placeholder="Contraseña"
                   value={clave}
-                  onChange={(e) => setclave(e.target.value)}
+                  onChange={(e) => setClave(e.target.value)}
                 />
               </div>
             </div>

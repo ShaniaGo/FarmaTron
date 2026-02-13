@@ -31,10 +31,13 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setUser(data.user);
+      const token = data.data?.token ?? data.token;
+      const user = data.data?.usuario ?? data.user;
+
+      if (token && user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
         toast.success('Inicio de sesión exitoso');
         return { success: true };
       } else {
@@ -49,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/register', {
+      const response = await fetch('http://localhost:8000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,10 +62,13 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setUser(data.user);
+      const token = data.data?.token ?? data.token;
+      const user = data.data?.usuario ?? data.user;
+
+      if (token && user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
         toast.success('Registro exitoso');
         return { success: true };
       } else {

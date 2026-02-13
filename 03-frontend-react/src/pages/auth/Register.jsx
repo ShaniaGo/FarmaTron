@@ -5,10 +5,11 @@ import { Pill, User, Mail, Lock, Phone } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    nombre: '',
+    cedula: '',
+    nombre_completo: '',
     email: '',
-    password: '',
-    password_confirmation: '',
+    clave: '',
+    clave_confirmation: '',
     telefono: '',
     direccion: '',
   });
@@ -50,18 +51,34 @@ const Register = () => {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Nombre */}
+            {/* Cédula */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                name="nombre"
+                name="cedula"
+                type="text"
+                required
+                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                placeholder="Cédula (ej: V12345678)"
+                value={formData.cedula}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Nombre completo */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                name="nombre_completo"
                 type="text"
                 required
                 className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 placeholder="Nombre completo"
-                value={formData.nombre}
+                value={formData.nombre_completo}
                 onChange={handleChange}
               />
             </div>
@@ -90,8 +107,9 @@ const Register = () => {
               <input
                 name="telefono"
                 type="tel"
+                required
                 className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="Teléfono (opcional)"
+                placeholder="Teléfono"
                 value={formData.telefono}
                 onChange={handleChange}
               />
@@ -109,34 +127,36 @@ const Register = () => {
               />
             </div>
 
-            {/* Contraseña */}
+            {/* Contraseña (mín. 8 caracteres) */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                name="password"
+                name="clave"
                 type="password"
                 required
+                minLength={8}
                 className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="Contraseña"
-                value={formData.password}
+                placeholder="Contraseña (mín. 8 caracteres)"
+                value={formData.clave}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Confirmar Contraseña */}
+            {/* Confirmar contraseña */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                name="password_confirmation"
+                name="clave_confirmation"
                 type="password"
                 required
+                minLength={8}
                 className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 placeholder="Confirmar contraseña"
-                value={formData.password_confirmation}
+                value={formData.clave_confirmation}
                 onChange={handleChange}
               />
             </div>
