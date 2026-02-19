@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import api from '../api';
 
 const AuthContext = createContext({});
 
@@ -21,63 +22,85 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, clave) => {
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, clave }),
-      });
+      const response = await api.post('/auth/login', { email, clave });
+      const data = response.data;
+      
+      // Verificar si la respuesta es exitosa
+      if (data.success) {
+        const token = data.data?.token;
+        const user = data.data?.usuario;
 
-      const data = await response.json();
-
-      const token = data.data?.token ?? data.token;
-      const user = data.data?.usuario ?? data.user;
-
-      if (token && user) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
-        toast.success('Inicio de sesión exitoso');
-        return { success: true };
-      } else {
-        toast.error(data.message || 'Error al iniciar sesión');
-        return { success: false, error: data.message };
+        if (token && user) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+          setUser(user);
+          toast.success('Inicio de sesión exitoso');
+          return { success: true };
+        }
       }
+      
+      // Si llegamos aquí, hubo un error en la respuesta
+      toast.error(data.message || 'Error al iniciar sesión');
+      return { success: false, error: data.message };
+      
     } catch (error) {
-      toast.error('Error de conexión');
-      return { success: false, error: error.message };
+      console.error('Error en login:', error);
+      
+      // Manejar diferentes tipos de errores
+      if (error.response) {
+        // El servidor respondió con un código de error
+        toast.error(error.response.data?.message || 'Credenciales incorrectas');
+      } else if (error.request) {
+        // La petición se hizo pero no se recibió respuesta
+        toast.error('Error de conexión con el servidor');
+      } else {
+        // Error en la configuración de la petición
+        toast.error('Error al procesar la solicitud');
+      }
+      
+      return { 
+        success: false, 
+        error: error.response?.data?.message || error.message 
+      };
     }
   };
 
   const register = async (userData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await api.post('/auth/register', userData);
+      const data = response.data;
 
-      const data = await response.json();
+      if (data.success) {
+        const token = data.data?.token;
+        const user = data.data?.usuario;
 
-      const token = data.data?.token ?? data.token;
-      const user = data.data?.usuario ?? data.user;
-
-      if (token && user) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
-        toast.success('Registro exitoso');
-        return { success: true };
-      } else {
-        toast.error(data.message || 'Error en el registro');
-        return { success: false, error: data.message };
+        if (token && user) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+          setUser(user);
+          toast.success('Registro exitoso');
+          return { success: true };
+        }
       }
+      
+      toast.error(data.message || 'Error en el registro');
+      return { success: false, error: data.message };
+      
     } catch (error) {
-      toast.error('Error de conexión');
-      return { success: false, error: error.message };
+      console.error('Error en registro:', error);
+      
+      if (error.response?.data?.errors) {
+        // Errores de validación
+        const errors = error.response.data.errors;
+        Object.values(errors).flat().forEach(err => toast.error(err));
+      } else {
+        toast.error(error.response?.data?.message || 'Error de conexión');
+      }
+      
+      return { 
+        success: false, 
+        error: error.response?.data?.message || error.message 
+      };
     }
   };
 

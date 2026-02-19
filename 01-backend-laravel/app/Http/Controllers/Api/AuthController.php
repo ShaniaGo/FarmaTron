@@ -84,36 +84,44 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $usuario = Usuario::where('email', $request->email)->first();
+        try {
+            $usuario = Usuario::where('email', $request->email)->first();
 
-        if (!$usuario || !Hash::check($request->clave, $usuario->clave)) {
+            if (!$usuario || !Hash::check($request->clave, $usuario->clave)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Credenciales incorrectas'
+                ], 401);
+            }
+
+            if ($usuario->estado !== 'activo') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tu cuenta está ' . $usuario->estado
+                ], 403);
+            }
+
+            $usuario->ultimo_login = now();
+            $usuario->save();
+
+            $token = $usuario->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso',
+                'data' => [
+                    'usuario' => $usuario,
+                    'token' => $token,
+                    'token_type' => 'Bearer'
+                ]
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Credenciales incorrectas'
-            ], 401);
+                'message' => 'Error al registrar usuario',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        if ($usuario->estado !== 'activo') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tu cuenta está ' . $usuario->estado
-            ], 403);
-        }
-
-        $usuario->ultimo_login = now();
-        $usuario->save();
-
-        $token = $usuario->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Inicio de sesión exitoso',
-            'data' => [
-                'usuario' => $usuario,
-                'token' => $token,
-                'token_type' => 'Bearer'
-            ]
-        ]);
     }
 
     public function logout(Request $request)

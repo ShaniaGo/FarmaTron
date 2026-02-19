@@ -2,23 +2,39 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Pill, Mail, Lock } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [clave, setClave] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // Para evitar múltiples envíos
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await login(email, clave);
-    if (result.success) {
-      navigate('/');
+    e.preventDefault(); // Esto PREVIENE la recarga de página
+    
+    if (isSubmitting) return; // Evitar envíos múltiples
+    
+    setIsSubmitting(true);
+    
+    try {
+      const result = await login(email, clave);
+      
+      if (result?.success) {
+        navigate('/'); // O la ruta a donde quieras redirigir
+      }
+      // Si hay error, NO redirigimos y mostramos el toast desde AuthContext
+    } catch (error) {
+      console.error('Error en login:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Toaster position="top-right" />
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
@@ -51,6 +67,7 @@ const Login = () => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -69,6 +86,7 @@ const Login = () => {
                   placeholder="Contraseña"
                   value={clave}
                   onChange={(e) => setClave(e.target.value)}
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -77,9 +95,14 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              disabled={isSubmitting}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                isSubmitting 
+                  ? 'bg-primary-400 cursor-not-allowed' 
+                  : 'bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
+              }`}
             >
-              Iniciar Sesión
+              {isSubmitting ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </div>
         </form>
