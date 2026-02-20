@@ -56,7 +56,9 @@ const Register = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
-            <Pill className="h-12 w-12 text-primary-600" />
+            <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+                    className='rounded-full h-20 shadow-lg 
+                        border-default rounded-base shadow-xs'/>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Crear cuenta en Farmacia FRS23

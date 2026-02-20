@@ -10,7 +10,9 @@ const Footer = () => {
           {/* Logo y descripción */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Pill className="h-8 w-8 text-primary-400" />
+              <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+                    className='rounded-full h-6 shadow-lg 
+                        border-default rounded-base shadow-xs'/>
               <span className="text-2xl font-bold">FarmaTron</span>
             </div>
             <p className="text-gray-400">

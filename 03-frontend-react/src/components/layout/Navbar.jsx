@@ -18,7 +18,9 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Pill className="h-8 w-8 text-primary-600" />
+            <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+                    className='rounded-full h-10 shadow-lg 
+                        border-default rounded-base shadow-xs'/>
             <span className="text-2xl font-bold text-primary-700">FarmaTron</span>
           </Link>
 

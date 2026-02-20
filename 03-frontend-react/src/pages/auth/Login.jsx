@@ -37,18 +37,18 @@ const Login = () => {
         setErrors({});
         
         try {
-        const result = await login(formData);
-        
-        if (result?.success) {
-            navigate('/'); // O la ruta a donde quieras redirigir
-        } else if (result.errors) {
-            setErrors(result.errors); // Guardar errores para mostrarlos
-        }
+            const result = await login(formData);
+            
+            if (result?.success) {
+                navigate('/'); // O la ruta a donde quieras redirigir
+            } else if (result.errors) {
+                setErrors(result.errors); // Guardar errores para mostrarlos
+            }
         // Si hay error, NO redirigimos y mostramos el toast desde AuthContext
         } catch (error) {
             console.error('Error en login:', error);
         } finally {
-        setIsSubmitting(false);
+            setIsSubmitting(false);
         }
     };
     
@@ -59,7 +59,10 @@ const Login = () => {
         <div className="max-w-md w-full space-y-8">
             <div>
             <div className="flex justify-center">
-                <Pill className="h-12 w-12 text-primary-600" />
+                {/* <Pill className="h-12 w-12 text-primary-600" /> */}
+                <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+                    className='rounded-full h-20 shadow-lg 
+                        border-default rounded-base shadow-xs'/>
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Iniciar Sesión en Farmacia FRS23
