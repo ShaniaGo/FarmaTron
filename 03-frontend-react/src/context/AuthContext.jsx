@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (email, clave) => {
+  const login = async (formData) => {
     try {
-      const response = await api.post('/auth/login', { email, clave });
+      const response = await api.post('/auth/login', formData);
       console.log(response);
       const data = response.data;
       // Verificar si la respuesta es exitosa
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (error.response?.data?.errors) {
-        toast.error(error.response.data?.message || 'Errores en el formulario');
+        // toast.error(error.response.data?.message || 'Errores en el formulario');
         // Errores de validación - mostrar cada error
         const errors = error.response.data.errors;
         // Object.keys(errors).forEach(field => {

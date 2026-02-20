@@ -6,11 +6,9 @@ import { Toaster } from 'react-hot-toast';
 
 const Login = () => {
     const [errors, setErrors] = useState({}); // Estado para errores
-    const [email, setEmail] = useState('');
-    const [clave, setClave] = useState('');
     const [formData, setFormData] = useState({
         email: '',
-        clave: '',
+        clave: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false); // Para evitar múltiples envíos
     const { login } = useAuth();
@@ -53,6 +51,7 @@ const Login = () => {
         setIsSubmitting(false);
         }
     };
+    
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -73,7 +72,7 @@ const Login = () => {
             </p>
             </div>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="rounded-md shadow-sm -space-y-px">
+            <div className="rounded-md shadow-sm ">
                 <div>
                 <label htmlFor="email" className="sr-only">Email</label>
                 <div className="relative">
@@ -84,12 +83,17 @@ const Login = () => {
                     id="email"
                     name="email"
                     type="email"
-                    className="appearance-none rounded-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                    className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                        errors.email ? 'border-red-500' : 'border-gray-300'
+                    } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                     placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formData.email}
+                    onChange={handleChange}
                     disabled={isSubmitting}
                     />
+                    {errors.email && (
+                        <p className="mt-1 text-sm text-red-600">{errors.email[0]}</p>
+                    )}
                 </div>
                 </div>
                 <div>
@@ -102,12 +106,17 @@ const Login = () => {
                     id="clave"
                     name="clave"
                     type="password"
-                    className="appearance-none rounded-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                    className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                        errors.clave ? 'border-red-500' : 'border-gray-300'
+                        } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                     placeholder="Contraseña"
-                    value={clave}
-                    onChange={(e) => setClave(e.target.value)}
+                    value={formData.clave}
+                    onChange={handleChange}
                     disabled={isSubmitting}
                     />
+                    {errors.clave && (
+                        <p className="mt-1 text-sm text-red-600">{errors.clave[0]}</p>
+                    )}
                 </div>
                 </div>
             </div>
