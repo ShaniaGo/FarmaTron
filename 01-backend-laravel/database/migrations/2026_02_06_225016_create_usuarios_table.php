@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula', 20)->unique();
+            $table->unsignedInteger('cedula')->unique();
             $table->string('nombre_completo', 100);
             $table->string('email', 100)->unique();
             $table->string('clave');

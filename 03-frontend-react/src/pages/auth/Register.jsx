@@ -15,6 +15,8 @@ const Register = () => {
     direccion: '',
   });
   
+  const [errors, setErrors] = useState({}); // Estado para errores
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -23,14 +25,29 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Limpiar error del campo cuando el usuario empieza a escribir
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: null
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setErrors({});
+    
     const result = await register(formData);
+    
     if (result.success) {
       navigate('/');
+    } else if (result.errors) {
+      setErrors(result.errors); // Guardar errores para mostrarlos
     }
+    
+    setIsSubmitting(false);
   };
 
   return (
@@ -42,7 +59,7 @@ const Register = () => {
             <Pill className="h-12 w-12 text-primary-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Crear cuenta en FarmaTron
+            Crear cuenta en Farmacia FRS23
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             ¿Ya tienes una cuenta?{' '}
@@ -61,12 +78,18 @@ const Register = () => {
               <input
                 name="cedula"
                 type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.cedula ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Cédula (ej: V12345678)"
                 value={formData.cedula}
                 onChange={handleChange}
+                disabled={isSubmitting}
+
               />
+              {errors.cedula && (
+                <p className="mt-1 text-sm text-red-600">{errors.cedula[0]}</p>
+              )}
             </div>
 
             {/* Nombre completo */}
@@ -77,12 +100,17 @@ const Register = () => {
               <input
                 name="nombre_completo"
                 type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.nombre_completo ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Nombre completo"
                 value={formData.nombre_completo}
                 onChange={handleChange}
+                disabled={isSubmitting} 
               />
+              {errors.nombre_completo && (
+                <p className="mt-1 text-sm text-red-600">{errors.nombre_completo[0]}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -93,12 +121,17 @@ const Register = () => {
               <input
                 name="email"
                 type="email"
-                required
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email[0]}</p>
+              )}
             </div>
 
             {/* Teléfono */}
@@ -109,12 +142,17 @@ const Register = () => {
               <input
                 name="telefono"
                 type="tel"
-                required
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.telefono ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Teléfono"
                 value={formData.telefono}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+              {errors.telefono && (
+                <p className="mt-1 text-sm text-red-600">{errors.telefono[0]}</p>
+              )}
             </div>
 
             {/* Dirección */}
@@ -122,11 +160,17 @@ const Register = () => {
               <input
                 name="direccion"
                 type="text"
-                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.direccion ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Dirección (opcional)"
                 value={formData.direccion}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+              {errors.direccion && (
+                <p className="mt-1 text-sm text-red-600">{errors.direccion[0]}</p>
+              )}
             </div>
 
             {/* Contraseña (mín. 8 caracteres) */}
@@ -137,13 +181,18 @@ const Register = () => {
               <input
                 name="clave"
                 type="password"
-                required
                 minLength={8}
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Contraseña (mín. 8 caracteres)"
                 value={formData.clave}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+              {errors.clave && (
+                <p className="mt-1 text-sm text-red-600">{errors.clave[0]}</p>
+              )}
             </div>
 
             {/* Confirmar contraseña */}
@@ -154,13 +203,18 @@ const Register = () => {
               <input
                 name="clave_confirmation"
                 type="password"
-                required
                 minLength={8}
-                className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                  errors.clave_confirmation ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Confirmar contraseña"
                 value={formData.clave_confirmation}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+              {errors.clave_confirmation && (
+                <p className="mt-1 text-sm text-red-600">{errors.email[0]}</p>
+              )}
             </div>
           </div>
 

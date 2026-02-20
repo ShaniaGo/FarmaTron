@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, clave) => {
     try {
       const response = await api.post('/auth/login', { email, clave });
+      console.log(response);
       const data = response.data;
-      
       // Verificar si la respuesta es exitosa
       if (data.success) {
         const token = data.data?.token;
@@ -57,6 +57,23 @@ export const AuthProvider = ({ children }) => {
         // Error en la configuración de la petición
         toast.error('Error al procesar la solicitud');
       }
+
+      if (error.response?.data?.errors) {
+        toast.error(error.response.data?.message || 'Errores en el formulario');
+        // Errores de validación - mostrar cada error
+        const errors = error.response.data.errors;
+        // Object.keys(errors).forEach(field => {
+        //   errors[field].forEach(errorMessage => {
+        //     // toast.error(errorMessage);
+        //   });
+        // });
+        console.log(errors)
+        return { 
+          success: false, 
+          errors: errors 
+        };
+      }
+      
       
       return { 
         success: false, 
@@ -69,11 +86,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/register', userData);
       const data = response.data;
-
+  
       if (data.success) {
         const token = data.data?.token;
         const user = data.data?.usuario;
-
+  
         if (token && user) {
           localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(user));
@@ -90,13 +107,22 @@ export const AuthProvider = ({ children }) => {
       console.error('Error en registro:', error);
       
       if (error.response?.data?.errors) {
-        // Errores de validación
+        toast.error(error.response.data?.message || 'Errores en el formulario');
+        // Errores de validación - mostrar cada error
         const errors = error.response.data.errors;
-        Object.values(errors).flat().forEach(err => toast.error(err));
-      } else {
-        toast.error(error.response?.data?.message || 'Error de conexión');
+        // Object.keys(errors).forEach(field => {
+        //   errors[field].forEach(errorMessage => {
+        //     // toast.error(errorMessage);
+        //   });
+        // });
+        console.log(errors)
+        return { 
+          success: false, 
+          errors: errors 
+        };
       }
       
+      toast.error(error.response?.data?.message || 'Error de conexión');
       return { 
         success: false, 
         error: error.response?.data?.message || error.message 

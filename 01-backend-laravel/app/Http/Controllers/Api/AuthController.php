@@ -18,6 +18,7 @@ class AuthController extends Controller
             'nombre_completo' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:usuarios',
             'clave' => 'required|string|min:8|confirmed',
+            'clave_confirmation' => 'required|string',
             'telefono' => 'required|string|max:20',
             'direccion' => 'nullable|string',
             'tipo' => 'in:cliente,farmaceutico,repartidor,admin',
@@ -118,7 +119,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al registrar usuario',
+                'message' => 'Error al iniciar sesión',
                 'error' => $e->getMessage()
             ], 500);
         }
