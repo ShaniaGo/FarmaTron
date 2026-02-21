@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('cedula')->unique();
-            $table->string('nombre_completo', 100);
+            $table->string('primer_nombre', 20);
+            $table->string('segundo_nombre', 20);
+            $table->string('primer_apellido', 20);
+            $table->string('segundo_apellido', length: 20);
             $table->string('email', 100)->unique();
             $table->string('clave');
             $table->string('telefono', 20);
