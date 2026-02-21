@@ -238,12 +238,24 @@ const Register = () => {
           </div>
 
           <div>
-            <button
+            {/* <button
               type="submit"
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Registrarse
-            </button>
+            </button> */}
+
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                    isSubmitting 
+                    ? 'bg-primary-400 cursor-not-allowed' 
+                    : 'bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
+                }`}
+                >
+                {isSubmitting ? 'Registrando...' : 'Registrarse'}
+                </button>
           </div>
         </form>
       </div>
