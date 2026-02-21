@@ -77,12 +77,12 @@ const Perfil = () => {
                             <input
                                 type="text"
                                 name="nombre"
-                                value={user?.nombre_completo ?? ''}
+                                value={user?.primer_nombre+" "+user?.segundo_nombre+' '+user?.primer_apellido+" "+user?.segundo_apellido}
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                             ) : (
-                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.nombre_completo}</p>
+                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.primer_nombre} {user?.segundo_nombre} {user?.primer_apellido} {user?.segundo_apellido}</p>
                             )}
                         </div>
 

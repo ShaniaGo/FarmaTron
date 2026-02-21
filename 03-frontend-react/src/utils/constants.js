@@ -1,5 +1,12 @@
 // constants.js - Para Vite
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+export const API_URL = (() => {
+  // Si estamos en la misma máquina que el backend
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:8000/api';
+  }
+  // Si accedemos desde otra máquina, usar la IP del servidor
+  return 'http://192.168.0.186:8000/api'; // Cambia por tu IP real
+})();
 
 export const CATEGORIAS_MEDICAMENTOS = [
   { id: 1, nombre: 'Analgésicos' },

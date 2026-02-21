@@ -1,105 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Pill, ShoppingCart } from 'lucide-react';
+import api from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const Medicamentos = () => {
   const [medicamentos, setMedicamentos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-
-  const categorias = [
-    'Todos',
-    'Analgésicos',
-    'Antibióticos',
-    'Antigripales',
-    'Digestivos',
-    'Dermatológicos',
-    'Vitaminas'
-  ];
-
-  // Datos de ejemplo (reemplazar con API real)
-  const medicamentosEjemplo = [
-    {
-      id: 1,
-      nombre: 'Paracetamol 500mg',
-      descripcion: 'Analgésico y antipirético',
-      precio: 5.99,
-      stock: 50,
-      categoria: 'Analgésicos',
-      farmacia: 'Farmacia Central',
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      id: 2,
-      nombre: 'Amoxicilina 500mg',
-      descripcion: 'Antibiótico de amplio espectro',
-      precio: 12.99,
-      stock: 30,
-      categoria: 'Antibióticos',
-      farmacia: 'Farmacia Salud',
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      id: 3,
-      nombre: 'Ibuprofeno 400mg',
-      descripcion: 'Antiinflamatorio no esteroideo',
-      precio: 7.50,
-      stock: 40,
-      categoria: 'Analgésicos',
-      farmacia: 'Farmacia 24 Horas',
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      id: 4,
-      nombre: 'Omeprazol 20mg',
-      descripcion: 'Inhibidor de bomba de protones',
-      precio: 15.75,
-      stock: 25,
-      categoria: 'Digestivos',
-      farmacia: 'Farmacia Central',
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      id: 5,
-      nombre: 'Vitamina C 1000mg',
-      descripcion: 'Suplemento vitamínico',
-      precio: 9.99,
-      stock: 60,
-      categoria: 'Vitaminas',
-      farmacia: 'Farmacia Salud',
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      id: 6,
-      nombre: 'Loratadina 10mg',
-      descripcion: 'Antihistamínico',
-      precio: 8.25,
-      stock: 35,
-      categoria: 'Dermatológicos',
-      farmacia: 'Farmacia 24 Horas',
-      imagen: 'https://via.placeholder.com/150'
-    }
-  ];
+  const [addingToCart, setAddingToCart] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Simular carga de datos
-    setTimeout(() => {
-      setMedicamentos(medicamentosEjemplo);
-      setLoading(false);
-    }, 1000);
-  }, []);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const filteredMedicamentos = medicamentos.filter(med => {
-    const matchesSearch = med.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         med.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === '' || selectedCategory === 'Todos' || 
-                           med.categoria === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+        const params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (selectedCategory && selectedCategory !== 'Todos') params.categoria_id = selectedCategory;
 
-  const handleAddToCart = (medicamento) => {
-    console.log('Agregar al carrito:', medicamento);
-    // Implementar lógica del carrito
+        const [productosRes, categoriasRes] = await Promise.all([
+          api.get('/productos', { params: { ...params, per_page: 50 } }),
+          api.get('/productos/categorias')
+        ]);
+
+        if (productosRes.data?.success) {
+          const data = productosRes.data.data;
+          const lista = data?.data ?? (Array.isArray(data) ? data : []);
+          setMedicamentos(Array.isArray(lista) ? lista : []);
+        }
+
+        if (categoriasRes.data?.success) {
+          const cats = categoriasRes.data.data || [];
+          setCategorias([{ id: '', nombre: 'Todos' }, ...cats]);
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || 'Error al cargar medicamentos');
+        setMedicamentos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm, selectedCategory]);
+
+  const mapMedicamento = (med) => {
+    const stockDisponible = med.stock?.filter(s => s.disponible && s.stock_actual > 0) || [];
+    const precioMin = stockDisponible.length
+      ? Math.min(...stockDisponible.map(s => parseFloat(s.precio_venta)))
+      : parseFloat(med.precio_referencia || 0);
+    const totalStock = stockDisponible.reduce((sum, s) => sum + (s.stock_actual || 0), 0);
+    const farmacias = stockDisponible.map(s => s.farmacia?.nombre).filter(Boolean);
+
+    return {
+      id: med.id,
+      nombre: med.nombre_comercial,
+      descripcion: med.descripcion || `${med.nombre_generico || ''} ${med.concentracion || ''} - ${med.contenido || ''}`.trim() || 'Medicamento de venta en farmacias',
+      precio: precioMin,
+      stock: totalStock,
+      categoria: med.categoria?.nombre || 'Sin categoría',
+      farmacia: farmacias[0] || (farmacias.length > 1 ? `${farmacias.length} farmacias` : 'Disponible'),
+      imagen: med.imagen_url,
+      stockDisponible,
+      requiereReceta: med.requiere_receta
+    };
+  };
+
+  const filteredMedicamentos = medicamentos.map(mapMedicamento);
+
+  const handleAddToCart = async (med) => {
+    if (!user) {
+      window.location.href = '/login?redirect=/medicamentos';
+      return;
+    }
+    const stock = med.stockDisponible?.[0];
+    if (!stock?.id) return;
+
+    setAddingToCart(med.id);
+    try {
+      await api.post('/carrito/agregar', {
+        stock_farmacia_id: stock.id,
+        cantidad: 1
+      });
+      // Opcional: mostrar toast de éxito
+    } catch (err) {
+      console.error('Error al agregar:', err);
+      alert(err.response?.data?.message || 'No se pudo agregar al carrito');
+    } finally {
+      setAddingToCart(null);
+    }
   };
 
   if (loading) {
@@ -108,6 +102,19 @@ const Medicamentos = () => {
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
           <p className="mt-4 text-gray-600">Cargando medicamentos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center">
+          <Pill className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Error al cargar</h3>
+          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-gray-600 text-sm">Verifica que el backend esté corriendo en {import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}</p>
         </div>
       </div>
     );
@@ -148,7 +155,7 @@ const Medicamentos = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
                 {categorias.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat.id ?? cat.nombre} value={cat.id ?? ''}>{cat.nombre}</option>
                 ))}
               </select>
             </div>
@@ -183,10 +190,11 @@ const Medicamentos = () => {
               
               <button
                 onClick={() => handleAddToCart(med)}
-                className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+                disabled={addingToCart === med.id || med.stock === 0}
+                className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingCart className="h-5 w-5" />
-                Agregar al Carrito
+                {addingToCart === med.id ? 'Agregando...' : med.stock === 0 ? 'Sin stock' : 'Agregar al Carrito'}
               </button>
             </div>
           </div>
