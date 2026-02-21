@@ -10,6 +10,8 @@
 export const API_URL = (() => {
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     return 'http://localhost:8000/api';
+  } else if (window.location.hostname === '192.168.0.248') {
+    return 'http://192.168.0.248:8000/api';
   }
   return 'http://192.168.0.186:8000/api';
 })();

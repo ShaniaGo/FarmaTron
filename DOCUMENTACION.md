@@ -17,8 +17,9 @@ Plataforma de delivery de medicamentos a domicilio. Consta de un backend Laravel
 1. [Estructura del Proyecto](#estructura-del-proyecto)
 2. [Backend (Laravel)](#backend-laravel)
 3. [Frontend (React)](#frontend-react)
-4. [Configuración y Ejecución](#configuración-y-ejecución)
-5. [Flujos Principales](#flujos-principales)
+4. [Geolocalización (Farmacias)](#geolocalización-farmacias)
+5. [Configuración y Ejecución](#configuración-y-ejecución)
+6. [Flujos Principales](#flujos-principales)
 
 ---
 
@@ -179,6 +180,7 @@ php artisan db:seed --class=MedicamentosSeeder
 - **Tippy.js** - Tooltips
 - **React Hot Toast** - Notificaciones
 - **TanStack Query** - Cache de datos (configurado)
+- **Leaflet + react-leaflet** - Mapas interactivos y geolocalización (vista Farmacias)
 
 ### Estructura de Carpetas
 
@@ -204,7 +206,7 @@ src/
 | `/login` | Login | Inicio de sesión |
 | `/register` | Register | Registro |
 | `/medicamentos` | Medicamentos | Catálogo con búsqueda y filtros |
-| `/farmacias` | Farmacias | Listado de farmacias |
+| `/farmacias` | Farmacias | Listado de farmacias y mapa con geolocalización |
 | `/carrito` | Carrito | Carrito de compras |
 | `/pedidos` | Pedidos | Historial de pedidos |
 | `/perfil` | Perfil | Perfil de usuario |
@@ -214,6 +216,7 @@ src/
 | Página | Funcionalidad |
 |--------|---------------|
 | **Medicamentos** | Lista de API, búsqueda, filtro por categoría, agregar al carrito |
+| **Farmacias** | Listado de farmacias, mapa con marcadores (Leaflet) y botón "Ruta" a Google Maps |
 | **Carrito** | Ver items, actualizar cantidad, eliminar, resumen con total |
 | **Login/Register** | Auth con token en localStorage |
 | **Perfil** | Datos del usuario (según implementación) |
@@ -239,6 +242,40 @@ VITE_API_URL=http://localhost:8000/api
 ```
 
 Para acceso desde otra máquina, usar la IP del servidor (ej: `http://192.168.0.186:8000/api`).
+
+---
+
+## Geolocalización (Farmacias)
+
+La vista **Farmacias** (`/farmacias`) incluye un mapa interactivo para ubicar las farmacias asociadas.
+
+### Tecnología
+
+- **Leaflet** + **react-leaflet**: mapa base con tiles de OpenStreetMap (sin API key).
+- Cada farmacia con coordenadas (`lat`, `lng`) se muestra como **marcador** en el mapa.
+- Al hacer clic en un marcador se abre un **popup** con nombre, dirección y teléfono.
+
+### Ubicación destacada: Farmacia FRS 23
+
+- **Dirección:** Caracas 1034, Distrito Capital, Farmacia FRS 23  
+- **Coordenadas:** 10.4806, -66.9036 (centro de Caracas, Distrito Capital)  
+- Aparece como primera farmacia en el listado y con marcador propio en el mapa.
+
+### Funcionalidad "Ruta"
+
+- En cada tarjeta de farmacia, el botón **Ruta** abre **Google Maps** en una nueva pestaña.
+- Enlace: `https://www.google.com/maps/dir/?api=1&destination={lat},{lng}` para obtener direcciones hasta esa ubicación.
+
+### Implementación (resumen)
+
+| Elemento | Descripción |
+|---------|-------------|
+| **MapContainer** | Centrado en Caracas (zoom 14), altura 400px |
+| **TileLayer** | OpenStreetMap |
+| **Marker** | Icono por defecto de Leaflet; una por farmacia con coordenadas |
+| **Popup** | Nombre, dirección completa y teléfono |
+
+Las farmacias sin `lat`/`lng` no se muestran en el mapa pero siguen visibles en el listado de tarjetas.
 
 ---
 
