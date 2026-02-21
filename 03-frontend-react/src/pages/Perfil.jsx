@@ -178,8 +178,8 @@ const Perfil = () => {
                     <div className="p-3 border border-gray-200 rounded-lg">
                         <div className="flex justify-between items-center">
                         <div>
-                            <p className="font-medium">Visa •••• 1234</p>
-                            <p className="text-sm text-gray-600">Principal</p>
+                            <p className="font-medium">Pago Móvil</p>
+                            <p className="text-sm text-gray-600">Banco de Venezuela</p>
                         </div>
                         <button className="text-primary-600 hover:text-primary-800 text-sm">
                             Editar

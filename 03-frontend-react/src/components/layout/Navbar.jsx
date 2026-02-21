@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Home, Pill } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Home, Pill, HouseHeart, Archive } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
@@ -30,14 +30,17 @@ const Navbar = () => {
               <Home className="h-5 w-5" />
               <span>Inicio</span>
             </Link>
-            <Link to="/medicamentos" className="hover:text-primary-600">
+            <Link to="/medicamentos" className="flex items-center space-x-1 hover:text-primary-600">
+              <Pill className="h-5 w-5" />
               Medicamentos
             </Link>
-            <Link to="/farmacias" className="hover:text-primary-600">
+            <Link to="/farmacias" className="flex items-center space-x-1 hover:text-primary-600">
+              <HouseHeart className="h-5 w-5"/>
               Farmacias
             </Link>
             {user && (
-              <Link to="/pedidos" className="hover:text-primary-600">
+              <Link to="/pedidos" className="flex items-center space-x-1 hover:text-primary-600">
+                <Archive className="h-5 w-5"/>
                 Mis Pedidos
               </Link>
             )}
@@ -45,13 +48,13 @@ const Navbar = () => {
 
           {/* Iconos de usuario/carrito */}
           <div className="flex items-center space-x-4">
-            <Link to="/carrito" className="p-2 hover:bg-gray-100 rounded-full">
+            <Link to="/carrito" className="p-2 hover:bg-gray-100 rounded-full" title="Carrito de compras">
               <ShoppingCart className="h-6 w-6" />
             </Link>
             
             {user ? (
               <div className="flex items-center space-x-3">
-                <Link to="/perfil" className="flex items-center space-x-1">
+                <Link to="/perfil" className="p-2 hover:bg-gray-100 rounded-full" title="Perfil">
                   <User className="h-6 w-6" />
                   <span className="hidden md:inline">{user.nombre}</span>
                 </Link>
