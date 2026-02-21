@@ -1,9 +1,19 @@
+/**
+ * Página de registro: formulario con cédula, nombre, email, teléfono, dirección y contraseña (con confirmación).
+ * Usa AuthContext.register; redirige a "/" en éxito o muestra errores de validación del backend.
+ * @module pages/auth/Register
+ */
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Pill, User, Mail, Lock, Phone } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 
+/**
+ * Formulario de registro con validación y enlace a login.
+ * @returns {JSX.Element}
+ */
 const Register = () => {
   const [formData, setFormData] = useState({
     cedula: '',
@@ -15,11 +25,15 @@ const Register = () => {
     direccion: '',
   });
   
-  const [errors, setErrors] = useState({}); // Estado para errores
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  /**
+   * Actualiza el campo del formulario y limpia el error de ese campo.
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -34,11 +48,14 @@ const Register = () => {
     }
   };
 
+  /**
+   * Envía los datos al registro del contexto; redirige a "/" si success o guarda result.errors.
+   * @param {React.FormEvent<HTMLFormElement>} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrors({});
-    
     const result = await register(formData);
     
     if (result.success) {

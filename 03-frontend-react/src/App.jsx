@@ -1,11 +1,14 @@
+/**
+ * Punto de entrada de la aplicación React FarmaLink.
+ * Define rutas, proveedores (Query + Auth) y layout principal.
+ * @module App
+ */
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Layout
 import Layout from './components/layout/Layout';
-
-// Pages
 import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -14,12 +17,14 @@ import Farmacias from './pages/Farmacias';
 import Carrito from './pages/Carrito';
 import Pedidos from './pages/Pedidos';
 import Perfil from './pages/Perfil';
-
-// Context
 import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient();
 
+/**
+ * Componente raíz: envuelve la app con QueryClient y AuthProvider y define rutas.
+ * @returns {JSX.Element}
+ */
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

@@ -10,8 +10,20 @@ use App\Models\Farmacia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Controlador de productos/medicamentos (API).
+ *
+ * Lista medicamentos con filtros, categorías, farmacias disponibles
+ * y productos destacados.
+ */
 class ProductoController extends Controller
 {
+    /**
+     * Lista medicamentos con filtros y paginación.
+     *
+     * @param Request $request Opcionales: categoria_id, search, farmacia_id, requiere_receta, order_by, order_dir, per_page
+     * @return \Illuminate\Http\JsonResponse Lista paginada de medicamentos
+     */
     public function index(Request $request)
     {
         try {
@@ -67,6 +79,12 @@ class ProductoController extends Controller
         }
     }
 
+    /**
+     * Muestra un medicamento por ID con categoría y stock por farmacia.
+     *
+     * @param int $id ID del medicamento
+     * @return \Illuminate\Http\JsonResponse Medicamento o 404
+     */
     public function show($id)
     {
         try {
@@ -87,6 +105,11 @@ class ProductoController extends Controller
         }
     }
 
+    /**
+     * Lista categorías de medicamentos con conteo de productos activos.
+     *
+     * @return \Illuminate\Http\JsonResponse Lista de categorías
+     */
     public function categorias()
     {
         try {
@@ -108,6 +131,12 @@ class ProductoController extends Controller
         }
     }
 
+    /**
+     * Farmacias que tienen stock disponible de un medicamento.
+     *
+     * @param int $productoId ID del medicamento
+     * @return \Illuminate\Http\JsonResponse Lista con farmacia, precio, stock, promoción
+     */
     public function farmaciasDisponibles($productoId)
     {
         try {
@@ -141,6 +170,11 @@ class ProductoController extends Controller
         }
     }
 
+    /**
+     * Devuelve hasta 10 medicamentos aleatorios con stock disponible.
+     *
+     * @return \Illuminate\Http\JsonResponse Lista de medicamentos destacados
+     */
     public function productosDestacados()
     {
         try {

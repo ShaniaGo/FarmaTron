@@ -1,19 +1,33 @@
+/**
+ * Página de inicio de sesión: formulario email/clave y enlace a registro.
+ * Usa AuthContext.login; redirige a "/" en éxito o muestra errores de validación.
+ * @module pages/auth/Login
+ */
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Pill, Mail, Lock } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 
+/**
+ * Formulario de login con control de envío y errores por campo.
+ * @returns {JSX.Element}
+ */
 const Login = () => {
-    const [errors, setErrors] = useState({}); // Estado para errores
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         email: '',
         clave: ''
     });
-    const [isSubmitting, setIsSubmitting] = useState(false); // Para evitar múltiples envíos
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
+    /**
+     * Actualiza el campo del formulario y limpia el error de ese campo.
+     * @param {React.ChangeEvent<HTMLInputElement>} e
+     */
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -28,10 +42,13 @@ const Login = () => {
         }
     };
 
+    /**
+     * Envía email y clave al login del contexto; redirige a "/" si success o guarda result.errors.
+     * @param {React.FormEvent<HTMLFormElement>} e
+     */
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Esto PREVIENE la recarga de página
-        
-        if (isSubmitting) return; // Evitar envíos múltiples
+        e.preventDefault();
+        if (isSubmitting) return;
         
         setIsSubmitting(true);
         setErrors({});

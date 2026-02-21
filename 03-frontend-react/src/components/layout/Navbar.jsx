@@ -1,9 +1,15 @@
+/**
+ * Barra de navegación: logo, enlaces (Inicio, Medicamentos, Farmacias, Carrito, Pedidos, Perfil) y menú usuario/logout.
+ * @module components/layout/Navbar
+ */
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import { ShoppingCart, User, LogOut, Home, Pill, HouseHeart, Archive } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+/** @returns {JSX.Element} Navbar con enlaces y estado de autenticación */
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();

@@ -9,8 +9,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Controlador del carrito de compras (API).
+ *
+ * Gestiona ítems del carrito del usuario: listar, agregar, actualizar cantidad,
+ * eliminar ítem y limpiar carrito. Agrupa por farmacia con subtotales y envío.
+ */
 class CarritoController extends Controller
 {
+    /**
+     * Obtiene el carrito del usuario agrupado por farmacia.
+     *
+     * @param Request $request Usuario autenticado
+     * @return \Illuminate\Http\JsonResponse items_por_farmacia, total_items, total
+     */
     public function index(Request $request)
     {
         try {
@@ -72,6 +84,12 @@ class CarritoController extends Controller
         }
     }
 
+    /**
+     * Agrega un producto al carrito o incrementa la cantidad si ya existe.
+     *
+     * @param Request $request stock_farmacia_id, cantidad (1-100)
+     * @return \Illuminate\Http\JsonResponse Producto agregado o 400/422/500
+     */
     public function agregar(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -156,6 +174,13 @@ class CarritoController extends Controller
         }
     }
 
+    /**
+     * Actualiza la cantidad de un ítem del carrito.
+     *
+     * @param Request $request cantidad (1-100)
+     * @param int $id ID del ítem en carrito_compras
+     * @return \Illuminate\Http\JsonResponse Ítem actualizado o 400/422/500
+     */
     public function actualizar(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -202,6 +227,12 @@ class CarritoController extends Controller
         }
     }
 
+    /**
+     * Elimina un ítem del carrito del usuario.
+     *
+     * @param int $id ID del ítem en carrito_compras
+     * @return \Illuminate\Http\JsonResponse Mensaje de éxito o 404/500
+     */
     public function eliminar($id)
     {
         try {
@@ -225,6 +256,11 @@ class CarritoController extends Controller
         }
     }
 
+    /**
+     * Vacía todo el carrito del usuario autenticado.
+     *
+     * @return \Illuminate\Http\JsonResponse Mensaje de éxito o 500
+     */
     public function limpiar()
     {
         try {

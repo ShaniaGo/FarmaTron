@@ -5,6 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Modelo de farmacia (punto de venta).
+ *
+ * Atributos: nombre, dirección, horarios, coordenadas, costo_envio_base, rating.
+ * Relaciones: stock (medicamentos), pedidos, promociones, calificaciones.
+ */
 class Farmacia extends Model
 {
     use HasFactory;
@@ -37,32 +43,40 @@ class Farmacia extends Model
     ];
 
     // Relaciones
+
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<StockFarmacia> */
     public function stock()
     {
         return $this->hasMany(StockFarmacia::class, 'farmacia_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Pedido> */
     public function pedidos()
     {
         return $this->hasMany(Pedido::class, 'farmacia_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Promocion> */
     public function promociones()
     {
         return $this->hasMany(Promocion::class, 'farmacia_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Calificacion> */
     public function calificaciones()
     {
         return $this->hasMany(Calificacion::class, 'farmacia_id');
     }
 
     // Scopes
+
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeAbiertas($query)
     {
         return $query->where('estado', 'abierta');
     }
 
+    /** @param \Illuminate\Database\Eloquent\Builder $query Distancia en km (fórmula Haversine). */
     public function scopeCercanas($query, $latitud, $longitud, $radio = 10)
     {
         return $query->whereRaw("

@@ -1,22 +1,27 @@
+/**
+ * Página de perfil del usuario: datos personales (nombre, email, teléfono, dirección),
+ * sección seguridad (cambiar contraseña), métodos de pago y preferencias de notificaciones.
+ * Los datos se obtienen de useAuth(); la edición está preparada (guardar pendiente de API).
+ * @module pages/Perfil
+ */
+
 import React, { useState } from 'react';
 import { User, Mail, Phone, MapPin, Shield, CreditCard, Bell, Key } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Vista de perfil con modo edición para información personal y bloques de seguridad/pago/notificaciones.
+ * @returns {JSX.Element}
+ */
 const Perfil = () => {
-  // const [user, setUser] = useState({
-  //   nombre: 'Juan Pérez',
-  //   email: 'juan.perez@email.com',
-  //   telefono: '+1 (555) 123-4567',
-  //   direccion: 'Av. Principal 123, Ciudad, País',
-  //   fechaRegistro: '2024-01-01'
-  // });
-
     const { user } = useAuth();
-    console.log(user);
-
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...user });
 
+    /**
+     * Actualiza formData con el valor del input que cambió.
+     * @param {React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>} e
+     */
     const handleInputChange = (e) => {
         setFormData({
         ...formData,
@@ -24,10 +29,11 @@ const Perfil = () => {
         });
     };
 
+    /**
+     * Cierra el modo edición (guardar cambios; llamada a API de actualización pendiente).
+     */
     const handleSave = () => {
-        // setUser(formData);
         setIsEditing(false);
-        // Aquí iría la llamada a la API para actualizar
     };
 
     return (

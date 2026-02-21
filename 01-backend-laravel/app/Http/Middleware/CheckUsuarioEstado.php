@@ -6,8 +6,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Middleware que verifica que el usuario autenticado esté en estado activo.
+ *
+ * Si el usuario está inactivo/suspendido, revoca todos sus tokens
+ * y devuelve 403. Se aplica a rutas API protegidas.
+ */
 class CheckUsuarioEstado
 {
+    /**
+     * @param Request $request
+     * @param Closure $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {

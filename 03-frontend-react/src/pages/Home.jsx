@@ -1,7 +1,15 @@
+/**
+ * Página de inicio (landing): hero, características y CTA al catálogo.
+ * @module pages/Home
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Truck, Shield, Clock, Search } from 'lucide-react';
 
+/**
+ * @returns {JSX.Element} Página principal con hero y enlace a medicamentos
+ */
 const Home = () => {
   return (
     <div className="min-h-screen">

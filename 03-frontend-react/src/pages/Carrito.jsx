@@ -1,3 +1,8 @@
+/**
+ * Página del carrito: listado por farmacia, actualizar cantidad, eliminar ítem, resumen y enlace a pedidos.
+ * @module pages/Carrito
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Trash2, Plus, Minus, ShoppingCart, ArrowRight, Pill } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,6 +10,10 @@ import { toast } from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Carrito de compras del usuario autenticado. Agrupa ítems por farmacia y muestra total con envío.
+ * @returns {JSX.Element}
+ */
 const Carrito = () => {
   const { user } = useAuth();
   const [itemsPorFarmacia, setItemsPorFarmacia] = useState([]);
@@ -14,6 +23,7 @@ const Carrito = () => {
   const [updating, setUpdating] = useState(null);
   const [deleting, setDeleting] = useState(null);
 
+  /** Obtiene el carrito del usuario desde la API y actualiza estado (items por farmacia, total). */
   const fetchCarrito = useCallback(async () => {
     if (!user) {
       setLoading(false);
@@ -46,6 +56,11 @@ const Carrito = () => {
     fetchCarrito();
   }, [fetchCarrito]);
 
+  /**
+   * Precio unitario de un ítem (con promoción si aplica).
+   * @param {Object} item - Ítem del carrito con stockFarmacia
+   * @returns {number}
+   */
   const getPrecioItem = (item) => {
     const sf = item.stock_farmacia;
     if (!sf) return 0;
@@ -53,6 +68,11 @@ const Carrito = () => {
     return parseFloat(sf.precio_venta) || 0;
   };
 
+  /**
+   * Actualiza la cantidad de un ítem o lo elimina si newQuantity < 1.
+   * @param {Object} item - Ítem del carrito
+   * @param {number} newQuantity
+   */
   const updateQuantity = async (item, newQuantity) => {
     if (newQuantity < 1) {
       removeItem(item);
@@ -74,6 +94,7 @@ const Carrito = () => {
     }
   };
 
+  /** Elimina un ítem del carrito y recarga la lista. */
   const removeItem = async (item) => {
     setDeleting(item.id);
     try {

@@ -1,13 +1,23 @@
-// constants.js - Para Vite
+/**
+ * Constantes globales del frontend FarmaLink.
+ * @module utils/constants
+ */
+
+/**
+ * URL base de la API según el host (localhost vs red).
+ * @type {string}
+ */
 export const API_URL = (() => {
-  // Si estamos en la misma máquina que el backend
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     return 'http://localhost:8000/api';
   }
-  // Si accedemos desde otra máquina, usar la IP del servidor
-  return 'http://192.168.0.186:8000/api'; // Cambia por tu IP real
+  return 'http://192.168.0.186:8000/api';
 })();
 
+/**
+ * Categorías de medicamentos (referencia/fallback).
+ * @type {{ id: number, nombre: string }[]}
+ */
 export const CATEGORIAS_MEDICAMENTOS = [
   { id: 1, nombre: 'Analgésicos' },
   { id: 2, nombre: 'Antibióticos' },
@@ -17,6 +27,10 @@ export const CATEGORIAS_MEDICAMENTOS = [
   { id: 6, nombre: 'Vitaminas' },
 ];
 
+/**
+ * Estados posibles de un pedido (valores enviados por el backend).
+ * @type {Object.<string, string>}
+ */
 export const ESTADOS_PEDIDO = {
   PENDIENTE: 'pendiente',
   CONFIRMADO: 'confirmado',

@@ -1,9 +1,18 @@
+/**
+ * Catálogo de medicamentos: búsqueda, filtro por categoría y agregar al carrito.
+ * @module pages/Medicamentos
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Pill, ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Página de listado de medicamentos con filtros y acción "Agregar al carrito".
+ * @returns {JSX.Element}
+ */
 const Medicamentos = () => {
   const [medicamentos, setMedicamentos] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -55,6 +64,11 @@ const Medicamentos = () => {
     fetchMedicamentos();
   }, [searchTerm, selectedCategory]);
 
+  /**
+   * Normaliza un medicamento del API a formato de tarjeta (precio mínimo, stock, farmacia).
+   * @param {Object} med - Medicamento con stock y categoria
+   * @returns {Object} Objeto con id, nombre, descripcion, precio, stock, categoria, farmacia, etc.
+   */
   const mapMedicamento = (med) => {
     const stockDisponible = med.stock?.filter(s => s.disponible && s.stock_actual > 0) || [];
     const precioMin = stockDisponible.length
@@ -79,6 +93,10 @@ const Medicamentos = () => {
 
   const filteredMedicamentos = medicamentos.map(mapMedicamento);
 
+  /**
+   * Agrega un medicamento al carrito (1 unidad). Redirige a login si no hay usuario.
+   * @param {Object} med - Medicamento mapeado (debe tener stockDisponible[0].id)
+   */
   const handleAddToCart = async (med) => {
     if (!user) {
       window.location.href = '/login?redirect=/medicamentos';

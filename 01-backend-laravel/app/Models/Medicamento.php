@@ -5,6 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Modelo de medicamento/producto del catálogo.
+ *
+ * Atributos: nombre_comercial, nombre_generico, categoría, requiere_receta,
+ * stock por farmacia (relación stock). Scopes: activos, disponibles, con/sin receta.
+ */
 class Medicamento extends Model
 {
     use HasFactory;
@@ -41,27 +47,34 @@ class Medicamento extends Model
     ];
 
     // Relaciones
+
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo */
     public function categoria()
     {
         return $this->belongsTo(CategoriaMedicamento::class, 'categoria_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany */
     public function stock()
     {
         return $this->hasMany(StockFarmacia::class, 'medicamento_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany */
     public function pedidoDetalles()
     {
         return $this->hasMany(PedidoDetalle::class, 'medicamento_id');
     }
 
     // Scopes
+
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeActivos($query)
     {
         return $query->where('activo', true);
     }
 
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeDisponibles($query)
     {
         return $query->whereHas('stock', function($q) {
@@ -69,16 +82,19 @@ class Medicamento extends Model
         });
     }
 
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeConReceta($query)
     {
         return $query->where('requiere_receta', true);
     }
 
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeSinReceta($query)
     {
         return $query->where('requiere_receta', false);
     }
 
+    /** @param \Illuminate\Database\Eloquent\Builder $query */
     public function scopeByCategoria($query, $categoriaId)
     {
         return $query->where('categoria_id', $categoriaId);

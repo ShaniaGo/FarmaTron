@@ -1,11 +1,25 @@
+/**
+ * Contexto de autenticación: usuario, login, register, logout.
+ * @module context/AuthContext
+ */
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import api from '../api';
 
 const AuthContext = createContext({});
 
+/**
+ * Hook para acceder al contexto de autenticación.
+ * @returns {{ user: object|null, login: Function, register: Function, logout: Function, loading: boolean }}
+ */
 export const useAuth = () => useContext(AuthContext);
 
+/**
+ * Proveedor de autenticación. Restaura usuario desde localStorage al montar.
+ * @param {Object} props
+ * @param {React.ReactNode} props.children
+ */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,6 +34,11 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  /**
+   * Inicia sesión con email y clave. Guarda token y usuario en localStorage.
+   * @param {{ email: string, clave: string }} formData
+   * @returns {Promise<{ success: boolean, error?: string, errors?: object }>}
+   */
   const login = async (formData) => {
     try {
       const response = await api.post('/auth/login', formData);
@@ -82,6 +101,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Registra un nuevo usuario. Guarda token y usuario en localStorage.
+   * @param {Object} userData Datos del formulario (cedula, nombre_completo, email, clave, telefono, etc.)
+   * @returns {Promise<{ success: boolean, error?: string, errors?: object }>}
+   */
   const register = async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
@@ -130,6 +154,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /** Cierra sesión eliminando token y usuario de localStorage. */
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

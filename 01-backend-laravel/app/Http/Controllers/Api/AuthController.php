@@ -9,8 +9,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Controlador de autenticación (API).
+ *
+ * Gestiona registro, login, logout, verificación de token y datos del usuario
+ * autenticado mediante Laravel Sanctum.
+ */
 class AuthController extends Controller
 {
+    /**
+     * Registra un nuevo usuario en el sistema.
+     *
+     * @param Request $request Datos: cedula, nombre_completo, email, clave, telefono, etc.
+     * @return \Illuminate\Http\JsonResponse Usuario creado y token Bearer, o errores 422/500
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -70,6 +82,12 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Inicia sesión con email y clave.
+     *
+     * @param Request $request email, clave
+     * @return \Illuminate\Http\JsonResponse Usuario y token Bearer, o 401/403/422/500
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -125,6 +143,12 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Cierra la sesión revocando el token actual.
+     *
+     * @param Request $request Usuario autenticado (token)
+     * @return \Illuminate\Http\JsonResponse Mensaje de éxito
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -135,6 +159,12 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Devuelve el usuario autenticado con pedidos y carrito cargados.
+     *
+     * @param Request $request Usuario autenticado
+     * @return \Illuminate\Http\JsonResponse { usuario con relaciones }
+     */
     public function user(Request $request)
     {
         return response()->json([
@@ -145,6 +175,12 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Verifica que el token sea válido y devuelve el usuario.
+     *
+     * @param Request $request Usuario autenticado
+     * @return \Illuminate\Http\JsonResponse { success, usuario }
+     */
     public function verify(Request $request)
     {
         return response()->json([

@@ -12,8 +12,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Controlador de pedidos (API).
+ *
+ * CRUD de pedidos: listar (por rol), crear desde carrito, ver detalle,
+ * actualizar estado, cancelar y consultar seguimiento.
+ */
 class PedidoController extends Controller
 {
+    /**
+     * Lista pedidos según el tipo de usuario (cliente/farmacéutico/repartidor).
+     *
+     * @param Request $request Opcionales: estado, fecha_inicio, fecha_fin, per_page
+     * @return \Illuminate\Http\JsonResponse Lista paginada de pedidos
+     */
     public function index(Request $request)
     {
         try {
@@ -63,6 +75,12 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     * Crea un pedido a partir del carrito, actualiza stock y limpia carrito.
+     *
+     * @param Request $request farmacia_id, direccion_entrega, telefono_contacto, metodo_pago, carrito[]
+     * @return \Illuminate\Http\JsonResponse Pedido creado con número y total, o 422/500
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -191,6 +209,12 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     * Muestra un pedido por ID con relaciones. Verifica permisos por rol.
+     *
+     * @param int $id ID del pedido
+     * @return \Illuminate\Http\JsonResponse Pedido completo o 403/404
+     */
     public function show($id)
     {
         try {
@@ -226,6 +250,15 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     * Actualiza el estado del pedido y registra seguimiento.
+     *
+     * Valida transiciones de estado según rol. Opcional: repartidor_id, motivo_cancelacion.
+     *
+     * @param Request $request estado, observaciones, repartidor_id (si aplica)
+     * @param int $id ID del pedido
+     * @return \Illuminate\Http\JsonResponse Pedido actualizado o 400/403/422/500
+     */
     public function updateEstado(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -327,6 +360,12 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     * Cancela un pedido (cliente o admin), revierte stock y registra seguimiento.
+     *
+     * @param int $id ID del pedido
+     * @return \Illuminate\Http\JsonResponse Éxito o 400/403/500
+     */
     public function cancelar($id)
     {
         DB::beginTransaction();
@@ -387,6 +426,12 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     * Obtiene el historial de seguimiento de un pedido.
+     *
+     * @param int $id ID del pedido
+     * @return \Illuminate\Http\JsonResponse Lista de seguimientos ordenados por fecha
+     */
     public function seguimiento($id)
     {
         try {
