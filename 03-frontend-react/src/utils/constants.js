@@ -1,4 +1,5 @@
-export const API_URL = 'http://localhost:8000/api';
+// constants.js - Para Vite
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export const CATEGORIAS_MEDICAMENTOS = [
   { id: 1, nombre: 'Analgésicos' },

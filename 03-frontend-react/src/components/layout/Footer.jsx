@@ -10,10 +10,10 @@ const Footer = () => {
           {/* Logo y descripción */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+              <img src="/logo_farmatrom_recorte.png" alt="" 
                     className='rounded-full h-6 shadow-lg 
                         border-default rounded-base shadow-xs'/>
-              <span className="text-2xl font-bold">FarmaTron</span>
+              <span className="text-2xl font-bold">FarmaTrom</span>
             </div>
             <p className="text-gray-400">
               Tu plataforma confiable para la entrega de medicamentos a domicilio.
@@ -93,7 +93,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} FarmaTron. Todos los derechos reservados.
+              © {new Date().getFullYear()} FarmaTrom. Todos los derechos reservados.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm">

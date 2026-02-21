@@ -18,10 +18,10 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+            <img src="/logo_farmatrom_recorte.png" alt="" 
                     className='rounded-full h-10 shadow-lg 
                         border-default rounded-base shadow-xs'/>
-            <span className="text-2xl font-bold text-primary-700">FarmaTron</span>
+            <span className="text-2xl font-bold text-primary-700">FarmaTrom</span>
           </Link>
 
           {/* Menú de navegación */}

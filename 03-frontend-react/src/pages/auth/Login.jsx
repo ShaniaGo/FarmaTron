@@ -16,17 +16,17 @@ const Login = () => {
 
     const handleChange = (e) => {
         setFormData({
-          ...formData,
-          [e.target.name]: e.target.value
+            ...formData,
+            [e.target.name]: e.target.value
         });
         // Limpiar error del campo cuando el usuario empieza a escribir
         if (errors[e.target.name]) {
-          setErrors({
-            ...errors,
-            [e.target.name]: null
-          });
+            setErrors({
+                ...errors,
+                [e.target.name]: null
+            });
         }
-      };
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Esto PREVIENE la recarga de página
@@ -60,12 +60,12 @@ const Login = () => {
             <div>
             <div className="flex justify-center">
                 {/* <Pill className="h-12 w-12 text-primary-600" /> */}
-                <img src="/logo_farmaciafrs23_recorte.png" alt="" 
+                <img src="/logo_farmatrom_recorte.png" alt="" 
                     className='rounded-full h-20 shadow-lg 
                         border-default rounded-base shadow-xs'/>
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Iniciar Sesión en Farmacia FRS23
+                Iniciar Sesión en FarmaTrom
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
                 ¿No tienes una cuenta?{' '}
