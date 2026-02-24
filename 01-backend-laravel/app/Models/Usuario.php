@@ -22,7 +22,10 @@ class Usuario extends Authenticatable
 
     protected $fillable = [
         'cedula',
-        'nombre_completo',
+        'primer_nombre',
+        'segundo_nombre',
+        'primer_apellido',
+        'segundo_apellido',
         'email',
         'clave',
         'telefono',

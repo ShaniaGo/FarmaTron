@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Pill, User, Mail, Lock, Phone } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
+import FooterAuth from '../../components/layout/FooterAuth';
 
 /**
  * Formulario de registro con validación y enlace a login.
@@ -17,7 +18,10 @@ import { Toaster } from 'react-hot-toast';
 const Register = () => {
   const [formData, setFormData] = useState({
     cedula: '',
-    nombre_completo: '',
+    primer_nombre: '',
+    segundo_nombre: '',
+    primer_apellido: '',
+    segundo_apellido: '',
     email: '',
     clave: '',
     clave_confirmation: '',
@@ -57,7 +61,7 @@ const Register = () => {
     setIsSubmitting(true);
     setErrors({});
     const result = await register(formData);
-    
+    console.log(result);
     if (result.success) {
       navigate('/');
     } else if (result.errors) {
@@ -68,9 +72,9 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-2 px-4 sm:px-6 lg:px-8">
       <Toaster position="top-right" />
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full space-y-8 my-10 ">
         <div>
           <div className="flex justify-center">
             <img src="/logo_farmatrom_recorte.png" alt="" 
@@ -112,25 +116,92 @@ const Register = () => {
             </div>
 
             {/* Nombre completo */}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative colspan-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  name="primer_nombre"
+                  type="text"
+                  className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                    errors.primer_nombre ? 'border-red-500' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
+                  placeholder="Primer Nombre"
+                  value={formData.primer_nombre}
+                  onChange={handleChange}
+                  disabled={isSubmitting} 
+                />
+                {errors.primer_nombre && (
+                  <p className="mt-1 text-sm text-red-600">{errors.primer_nombre[0]}</p>
+                )}
               </div>
-              <input
-                name="nombre_completo"
-                type="text"
-                className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
-                  errors.nombre_completo ? 'border-red-500' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
-                placeholder="Nombre completo"
-                value={formData.nombre_completo}
-                onChange={handleChange}
-                disabled={isSubmitting} 
-              />
-              {errors.nombre_completo && (
-                <p className="mt-1 text-sm text-red-600">{errors.nombre_completo[0]}</p>
-              )}
+
+              <div className="relative colspan-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  name="segundo_nombre"
+                  type="text"
+                  className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                    errors.segundo_nombre ? 'border-red-500' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
+                  placeholder="Segundo Nombre"
+                  value={formData.segundo_nombre}
+                  onChange={handleChange}
+                  disabled={isSubmitting} 
+                />
+                {errors.segundo_nombre && (
+                  <p className="mt-1 text-sm text-red-600">{errors.segundo_nombre[0]}</p>
+                )}
+              </div>
+
+
+              <div className="relative colspan-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  name="primer_apellido"
+                  type="text"
+                  className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                    errors.primer_apellido ? 'border-red-500' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
+                  placeholder="Primer Apellido"
+                  value={formData.primer_apellido}
+                  onChange={handleChange}
+                  disabled={isSubmitting} 
+                />
+                {errors.primer_apellido && (
+                  <p className="mt-1 text-sm text-red-600">{errors.primer_apellido[0]}</p>
+                )}
+              </div>
+
+
+              <div className="relative colspan-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  name="segundo_apellido"
+                  type="text"
+                  className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
+                    errors.segundo_apellido ? 'border-red-500' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
+                  placeholder="Segundo Apellido"
+                  value={formData.segundo_apellido}
+                  onChange={handleChange}
+                  disabled={isSubmitting} 
+                />
+                {errors.segundo_apellido && (
+                  <p className="mt-1 text-sm text-red-600">{errors.segundo_apellido[0]}</p>
+                )}
+              </div>
             </div>
+
+            
 
             {/* Email */}
             <div className="relative">
@@ -202,7 +273,7 @@ const Register = () => {
                 type="password"
                 minLength={8}
                 className={`appearance-none relative block w-full px-3 py-3 pl-10 border ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
+                  errors.clave ? 'border-red-500' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
                 placeholder="Contraseña (mín. 8 caracteres)"
                 value={formData.clave}
@@ -232,7 +303,7 @@ const Register = () => {
                 disabled={isSubmitting}
               />
               {errors.clave_confirmation && (
-                <p className="mt-1 text-sm text-red-600">{errors.email[0]}</p>
+                <p className="mt-1 text-sm text-red-600">{errors.clave_confirmation[0]}</p>
               )}
             </div>
           </div>
@@ -259,6 +330,8 @@ const Register = () => {
           </div>
         </form>
       </div>
+
+      <FooterAuth />
     </div>
   );
 };

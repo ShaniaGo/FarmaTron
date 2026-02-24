@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Usuario;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,10 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'cedula' => 'required|string|max:20|unique:usuarios',
-            'nombre_completo' => 'required|string|max:100',
+            'primer_nombre' => 'required|string|max:25',
+            'segundo_nombre' => 'required|string|max:25',
+            'primer_apellido' => 'required|string|max:25',
+            'segundo_apellido' => 'required|string|max:25',
             'email' => 'required|string|email|max:100|unique:usuarios',
             'clave' => 'required|string|min:8|confirmed',
             'clave_confirmation' => 'required|string',
@@ -36,6 +40,20 @@ class AuthController extends Controller
             'tipo' => 'in:cliente,farmaceutico,repartidor,admin',
             'fecha_nacimiento' => 'nullable|date',
             'genero' => 'nullable|in:M,F,Otro',
+        ], [], [
+            'cedula' => 'Cédula',
+            'primer_nombre' => 'Primer Nombre',
+            'segundo_nombre' => 'Segundo Nombre',
+            'primer_apellido' => 'Primer Apellido',
+            'segundo_apellido' => 'Segundo Apellido',
+            'email' => 'Email',
+            'clave' => 'Contraseña',
+            'clave_confirmation' => 'Confirmar Contraseña',
+            'telefono' => 'Teléfono',
+            'direccion' => 'Direección',
+            'tipo' => 'Rol de Usuario',
+            'fecha_nacimiento' => 'Fecha de Nacimiento',
+            'genero' => 'Género',
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +67,10 @@ class AuthController extends Controller
         try {
             $usuario = Usuario::create([
                 'cedula' => $request->cedula,
-                'nombre_completo' => $request->nombre_completo,
+                'primer_nombre' => $request->primer_nombre,
+                'segundo_nombre' => $request->segundo_nombre,
+                'primer_apellido' => $request->primer_apellido,
+                'segundo_apellido' => $request->segundo_apellido,
                 'email' => $request->email,
                 'clave' => Hash::make($request->clave),
                 'telefono' => $request->telefono,
@@ -73,7 +94,7 @@ class AuthController extends Controller
                 ]
             ], 201);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al registrar usuario',

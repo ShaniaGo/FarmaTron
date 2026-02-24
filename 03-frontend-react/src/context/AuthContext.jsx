@@ -110,7 +110,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/register', userData);
       const data = response.data;
-  
       if (data.success) {
         const token = data.data?.token;
         const user = data.data?.usuario;
@@ -128,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: data.message };
       
     } catch (error) {
-      console.error('Error en registro:', error);
+      console.error('Error en registro:', error.response || error);
       
       if (error.response?.data?.errors) {
         toast.error(error.response.data?.message || 'Errores en el formulario');
@@ -149,7 +148,8 @@ export const AuthProvider = ({ children }) => {
       toast.error(error.response?.data?.message || 'Error de conexión');
       return { 
         success: false, 
-        error: error.response?.data?.message || error.message 
+        message: error.response?.data?.message || error.message,
+        error: error.response?.data?.error || 'Error de conexión'
       };
     }
   };

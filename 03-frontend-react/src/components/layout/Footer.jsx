@@ -93,15 +93,19 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-col">
-            <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} FarmaTrom. Todos los derechos reservados.
-            </p>
-            <p className="text-gray-400 text-sm">
-              Desarrollado por: 
-              <br /><a href="" className='hover:text-white'>Ing. Shania Gómez</a>
-              <br /><a href="" className='hover:text-white'>Ing. Zorayet Zamora</a>
-              <br /><a href="" className='hover:text-white'>Ing. Jeferson Oramas</a>
-            </p>
+              <p className="text-gray-400 text-sm">
+                © {new Date().getFullYear()} FarmaTrom. Todos los derechos reservados.
+              </p>
+              <div className="flex justify-evenly">
+                <p className="text-gray-400 text-sm">
+                  Desarrollado por: 
+                </p>
+                <p className="text-gray-400 text-sm">
+                  <a href="" className='hover:text-white'>Ing. Shania Gómez</a>
+                  <br /><a href="" className='hover:text-white'>Ing. Zorayet Zamora</a>
+                  <br /><a href="" className='hover:text-white'>Ing. Jeferson Oramas</a>
+                </p>
+              </div>
             </div>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm">
