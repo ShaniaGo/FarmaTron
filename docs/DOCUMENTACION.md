@@ -6,9 +6,9 @@ Plataforma de delivery de medicamentos a domicilio. Consta de un backend Laravel
 
 ## Documentación de Metodología
 
-- **[Metodología (Scrum + XP)](./docs/METODOLOGIA.md)** - Roles, artefactos, prácticas aplicadas
-- **[Product Backlog](./docs/PRODUCT_BACKLOG.md)** - Historias de usuario y requisitos
-- **[Planificación de Sprints](./docs/SPRINTS.md)** - Sprints, tareas y entregables
+- **[Metodología (Scrum + XP)](./METODOLOGIA.md)** - Roles, artefactos, prácticas aplicadas
+- **[Product Backlog](./PRODUCT_BACKLOG.md)** - Historias de usuario y requisitos
+- **[Planificación de Sprints](./SPRINTS.md)** - Sprints, tareas y entregables
 
 ---
 
@@ -27,13 +27,13 @@ Plataforma de delivery de medicamentos a domicilio. Consta de un backend Laravel
 
 ```
 FarmaTron/
-├── 01-backend-laravel/     # API REST (Laravel 12)
-├── 03-frontend-react/      # SPA (React 19 + Vite)
-├── docs/                   # Documentación metodológica
-│   ├── METODOLOGIA.md
-│   ├── PRODUCT_BACKLOG.md
-│   └── SPRINTS.md
-└── DOCUMENTACION.md
+├── backend-laravel/        # API REST (Laravel 12)
+├── frontend-react/         # SPA (React 19 + Vite)
+└── docs/                   # Documentación metodológica y técnica
+    ├── DOCUMENTACION.md
+    ├── METODOLOGIA.md
+    ├── PRODUCT_BACKLOG.md
+    └── SPRINTS.md
 ```
 
 ---
@@ -284,7 +284,7 @@ Las farmacias sin `lat`/`lng` no se muestran en el mapa pero siguen visibles en 
 ### Backend
 
 ```bash
-cd 01-backend-laravel
+cd backend-laravel
 composer install
 cp .env.example .env
 php artisan key:generate
@@ -300,7 +300,7 @@ Backend disponible en `http://localhost:8000`
 ### Frontend
 
 ```bash
-cd 03-frontend-react
+cd frontend-react
 npm install
 npm run dev
 ```

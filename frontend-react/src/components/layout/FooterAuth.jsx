@@ -19,11 +19,12 @@ const FooterAuth = () => {
             <img 
               src="/logo_unexca.jpg" 
               alt="Logo UNEXCA" 
-              className="h-12 w-auto object-contain"
+              className="h-12 w-auto object-contain rounded-md"
             />
             <div className="flex flex-col">
-              <span className="text-xs text-gray-500">Universidad Nacional Experimental</span>
-              <span className="text-sm font-semibold text-gray-700">de la Gran Caracas</span>
+              <span className='text-xs text-gray-500 mt-1'>Profesor: Walter Carrasquero</span>
+              <span className='text-xs text-gray-500'>Correo: waltercarrasquero66@gmail.com</span>
+              <span className='text-xs text-gray-500'>Teléfono: 0424-193-8899</span>
             </div>
           </div>
 
