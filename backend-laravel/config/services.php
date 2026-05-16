@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'bcv' => [
+        'fallback_tasa' => env('BCV_TASA_USD_FALLBACK'),
+        'verify_ssl' => env('BCV_VERIFY_SSL', env('APP_ENV') === 'production'),
+    ],
+
 ];

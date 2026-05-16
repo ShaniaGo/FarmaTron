@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PedidoController;
 use App\Http\Controllers\Api\CarritoController;
 use App\Http\Controllers\Api\FarmaciaController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\TasaCambioController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta de prueba
@@ -23,6 +24,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
+
+// Tasa de cambio BCV (pública)
+Route::get('/tasa-cambio', [TasaCambioController::class, 'show']);
 
 // Productos públicos
 Route::prefix('productos')->group(function () {

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { aBolivares } from '../utils/formatBs';
 
 /**
  * Carrito de compras del usuario autenticado. Agrupa ítems por farmacia y muestra total con envío.
@@ -22,6 +23,24 @@ const Carrito = () => {
   const [error, setError] = useState(null);
   const [updating, setUpdating] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [tasaBcv, setTasaBcv] = useState(null);
+  const [fechaValorBcv, setFechaValorBcv] = useState(null);
+
+  /** Obtiene la tasa USD/VES del BCV desde la API. */
+  const fetchTasaCambio = useCallback(async () => {
+    try {
+      const res = await api.get('/tasa-cambio');
+      if (res.data?.success && res.data.data?.tasa) {
+        setTasaBcv(parseFloat(res.data.data.tasa));
+        setFechaValorBcv(
+          res.data.data.fecha_valor_texto || res.data.data.fecha_valor || null
+        );
+      }
+    } catch {
+      setTasaBcv(null);
+      setFechaValorBcv(null);
+    }
+  }, []);
 
   /** Obtiene el carrito del usuario desde la API y actualiza estado (items por farmacia, total). */
   const fetchCarrito = useCallback(async () => {
@@ -55,6 +74,10 @@ const Carrito = () => {
   useEffect(() => {
     fetchCarrito();
   }, [fetchCarrito]);
+
+  useEffect(() => {
+    fetchTasaCambio();
+  }, [fetchTasaCambio]);
 
   /**
    * Precio unitario de un ítem (con promoción si aplica).
@@ -303,6 +326,42 @@ const Carrito = () => {
                   <span className="text-primary-600">${total.toFixed(2)}</span>
                 </div>
               </div>
+
+              {tasaBcv > 0 && (
+                <div className="rounded-lg bg-gray-50 border border-gray-200 p-4 space-y-3">
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Equivalente referencial (BCV)
+                  </p>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium text-gray-800">
+                      {aBolivares(subtotal, tasaBcv)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Envío</span>
+                    <span className="font-medium text-gray-800">
+                      {aBolivares(costoEnvio, tasaBcv)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-200">
+                    <span>Total en Bs.</span>
+                    <span>{aBolivares(total, tasaBcv)}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    Tasa BCV: Bs. {tasaBcv.toLocaleString('es-VE', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 4,
+                    })} / USD
+                    {fechaValorBcv && (
+                      <> · Fecha valor: {fechaValorBcv}</>
+                    )}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Monto referencial según tasa oficial. El cobro puede realizarse en USD u otra modalidad.
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">

@@ -17,7 +17,7 @@ const Perfil = () => {
     const { user } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...user });
-
+    console.log("user", user);
     /**
      * Actualiza formData con el valor del input que cambió.
      * @param {React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>} e
@@ -72,85 +72,105 @@ const Perfil = () => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <div className="flex items-center gap-2">
-                                <User className="h-4 w-4" />
-                                Nombre Completo
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <div className="flex items-center gap-2">
+                                    <User className="h-4 w-4" />
+                                    Nombre Completo
+                                </div>
+                                </label>
+                                {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="nombre"
+                                    value={user?.primer_nombre+" "+user?.segundo_nombre+' '+user?.primer_apellido+" "+user?.segundo_apellido}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                />
+                                ) : (
+                                <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.primer_nombre} {user?.segundo_nombre} {user?.primer_apellido} {user?.segundo_apellido}</p>
+                                )}
                             </div>
-                            </label>
-                            {isEditing ? (
-                            <input
-                                type="text"
-                                name="nombre"
-                                value={user?.primer_nombre+" "+user?.segundo_nombre+' '+user?.primer_apellido+" "+user?.segundo_apellido}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
-                            ) : (
-                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.primer_nombre} {user?.segundo_nombre} {user?.primer_apellido} {user?.segundo_apellido}</p>
-                            )}
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4" />
-                                Correo Electrónico
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <div className="flex items-center gap-2">
+                                    <Mail className="h-4 w-4" />
+                                    Correo Electrónico
+                                </div>
+                                </label>
+                                {isEditing ? (
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={user?.email ?? ''}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                />
+                                ) : (
+                                <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.email}</p>
+                                )}
                             </div>
-                            </label>
-                            {isEditing ? (
-                            <input
-                                type="email"
-                                name="email"
-                                value={user?.email ?? ''}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
-                            ) : (
-                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.email}</p>
-                            )}
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <div className="flex items-center gap-2">
-                                <Phone className="h-4 w-4" />
-                                Teléfono
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <div className="flex items-center gap-2">
+                                    <Phone className="h-4 w-4" />
+                                    Teléfono
+                                </div>
+                                </label>
+                                {isEditing ? (
+                                <input
+                                    type="tel"
+                                    name="telefono"
+                                    value={user?.telefono ?? ''}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                />
+                                ) : (
+                                <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.telefono}</p>
+                                )}
                             </div>
-                            </label>
-                            {isEditing ? (
-                            <input
-                                type="tel"
-                                name="telefono"
-                                value={user?.telefono ?? ''}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
-                            ) : (
-                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.telefono}</p>
-                            )}
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4" />
-                                Dirección
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="h-4 w-4" />
+                                    Dirección
+                                </div>
+                                </label>
+                                {isEditing ? (
+                                <textarea
+                                    name="direccion"
+                                    value={user?.direccion ?? ''}
+                                    onChange={handleInputChange}
+                                    rows="3"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                />
+                                ) : (
+                                <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.direccion}</p>
+                                )}
                             </div>
-                            </label>
-                            {isEditing ? (
-                            <textarea
-                                name="direccion"
-                                value={user?.direccion ?? ''}
-                                onChange={handleInputChange}
-                                rows="3"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
-                            ) : (
-                            <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.direccion}</p>
-                            )}
-                        </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="h-4 w-4" />
+                                    Rol de usuario
+                                </div>
+                                </label>
+                                {isEditing ? (
+                                <textarea
+                                    name="tipo"
+                                    value={user?.tipo ?? ''}
+                                    onChange={handleInputChange}
+                                    rows="3"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                />
+                                ) : (
+                                <p className="px-4 py-2 bg-gray-50 rounded-lg">{user?.tipo}</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                     </div>
