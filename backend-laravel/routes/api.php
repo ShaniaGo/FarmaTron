@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CarritoController;
 use App\Http\Controllers\Api\FarmaciaController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\TasaCambioController;
+use App\Http\Controllers\Api\AuditoriaController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta de prueba
@@ -54,12 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Perfil
-    // Route::prefix('profile')->group(function () {
-    //     Route::get('/', [ProfileController::class, 'show']);
-    //     Route::put('/', [ProfileController::class, 'update']);
-    //     Route::post('/change-password', [ProfileController::class, 'changePassword']);
-    //     Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
-    // });
+    Route::prefix('profile')->group(function () {
+        Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
+    });
 
     // Carrito
     Route::prefix('carrito')->group(function () {
@@ -79,6 +77,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}/cancelar', [PedidoController::class, 'cancelar']);
         Route::get('/{id}/seguimiento', [PedidoController::class, 'seguimiento']);
     });
+
+    // Auditoría (solo admin)
+    Route::middleware('role:admin')->get('/auditoria', [AuditoriaController::class, 'index']);
 
     // Productos protegidos (para agregar/actualizar si es admin)
     Route::middleware('role:admin,farmaceutico')->prefix('productos')->group(function () {

@@ -6,8 +6,9 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
-import { ShoppingCart, User, LogOut, Home, Pill, HouseHeart, Archive } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Home, Pill, HouseHeart, Archive, ClipboardList } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { isAdmin } from '../../utils/auth';
 
 /** @returns {JSX.Element} Navbar con enlaces y estado de autenticación */
 const Navbar = () => {
@@ -68,6 +69,12 @@ const Navbar = () => {
                 Mis Pedidos
               </Link>
             )}
+            {isAdmin(user) && (
+              <Link to="/auditoria" className={navLinkClass('/auditoria')}>
+                <ClipboardList className="h-5 w-5" />
+                <span>Auditoría</span>
+              </Link>
+            )}
           </div>
 
           {/* Iconos de usuario/carrito */}
@@ -83,7 +90,7 @@ const Navbar = () => {
                 <Tippy content="Perfil" placement="bottom">
                   <Link to="/perfil" className={iconLinkClass('/perfil')}>
                     <User className="h-6 w-6" />
-                  <span className="hidden md:inline">{user.nombre}</span>
+                  {/* <span className="hidden md:inline">{user.nombre}</span> */}
                   </Link>
                 </Tippy>
                 <button

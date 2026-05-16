@@ -17,6 +17,8 @@ import Farmacias from './pages/Farmacias';
 import Carrito from './pages/Carrito';
 import Pedidos from './pages/Pedidos';
 import Perfil from './pages/Perfil';
+import Auditoria from './pages/Auditoria';
+import AdminRoute from './components/AdminRoute';
 import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient();
@@ -40,6 +42,14 @@ function App() {
               <Route path="/carrito" element={<Layout><Carrito /></Layout>} />
               <Route path="/pedidos" element={<Layout><Pedidos /></Layout>} />
               <Route path="/perfil" element={<Layout><Perfil /></Layout>} />
+              <Route
+                path="/auditoria"
+                element={
+                  <AdminRoute>
+                    <Layout><Auditoria /></Layout>
+                  </AdminRoute>
+                }
+              />
             </Routes>
           </div>
         </Router>

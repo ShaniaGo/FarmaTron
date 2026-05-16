@@ -45,6 +45,11 @@ class Usuario extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'foto_perfil_url',
+        'nombre',
+    ];
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'fecha_nacimiento' => 'date',
@@ -60,6 +65,29 @@ class Usuario extends Authenticatable
     public function getAuthPassword()
     {
         return $this->clave;
+    }
+
+    public function getFotoPerfilUrlAttribute(): ?string
+    {
+        if (! $this->foto_perfil) {
+            return null;
+        }
+
+        if (str_starts_with($this->foto_perfil, 'http://') || str_starts_with($this->foto_perfil, 'https://')) {
+            return $this->foto_perfil;
+        }
+
+        return asset('storage/'.$this->foto_perfil);
+    }
+
+    public function getNombreAttribute(): string
+    {
+        return trim(implode(' ', array_filter([
+            $this->primer_nombre,
+            $this->segundo_nombre,
+            $this->primer_apellido,
+            $this->segundo_apellido,
+        ])));
     }
 
     // Relaciones

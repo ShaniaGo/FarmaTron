@@ -16,6 +16,9 @@ export const API_URL = (() => {
   return 'http://192.168.0.186:8000/api';
 })();
 
+/** URL base del backend (sin /api) para archivos en storage */
+export const STORAGE_URL = API_URL.replace(/\/api\/?$/, '');
+
 /**
  * Categorías de medicamentos (referencia/fallback).
  * @type {{ id: number, nombre: string }[]}
